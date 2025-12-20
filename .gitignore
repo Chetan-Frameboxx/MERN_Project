@@ -22,10 +22,6 @@ Thumbs.db
 *.sublime-workspace
 *.sublime-project
 
-# Build / dist folders (for frontend or backend)
-dist/
-build/
-
 # Temporary files
 tmp/
 temp/
