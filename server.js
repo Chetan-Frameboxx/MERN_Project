@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -11,31 +10,27 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-/* Middleware */
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-/* API routes */
+// API routes
 app.use("/api/products", productRoutes);
 
-/* Serve Vite frontend static files */
-app.use(express.static(path.join(__dirname, "dist")));
+// Serve static files from Vite build
+const distPath = path.join(__dirname, "dist");
+app.use(express.static(distPath));
 
-/* React Router fallback */
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
-
+// React Router fallback
 app.use((req, res, next) => {
-  console.log(req.url); // see what file is being requested
-  next();
+  // If the request accepts HTML, serve index.html
+  if (req.accepts("html")) {
+    res.sendFile(path.join(distPath, "index.html"));
+  } else {
+    next();
+  }
 });
 
-
-
-
-/* Start server */
+// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
