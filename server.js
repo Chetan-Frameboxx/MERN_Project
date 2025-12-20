@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
 const path = require("path");
+const cors = require("cors");
 const connectDB = require("./config/db");
 const productRoutes = require("./routes/productRoutes");
 
@@ -21,14 +21,9 @@ app.use("/api/products", productRoutes);
 const distPath = path.join(__dirname, "dist");
 app.use(express.static(distPath));
 
-// React Router fallback
-app.use((req, res, next) => {
-  // If the request accepts HTML, serve index.html
-  if (req.accepts("html")) {
-    res.sendFile(path.join(distPath, "index.html"));
-  } else {
-    next();
-  }
+// React Router fallback — ONLY for requests without a file extension
+app.get(/^(?!.*\..*$)/, (req, res) => {
+  res.sendFile(path.join(distPath, "index.html"));
 });
 
 // Start server
