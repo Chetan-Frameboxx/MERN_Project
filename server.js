@@ -22,8 +22,22 @@ app.use("/api/products", productRoutes);
 app.use(express.static(path.join(__dirname, "dist")));
 
 /* React Router fallback */
-app.get(/.*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
+// app.get(/.*/, (req, res) => {
+//   res.sendFile(path.join(__dirname, "dist", "index.html"));
+// });
+
+// app.use((req, res, next) => {
+//   console.log(req.url); // see what file is being requested
+//   next();
+// });
+
+
+// Serve static files first
+app.use(express.static(path.join(__dirname, "dist")));
+
+// React Router fallback for all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 /* Start server */
